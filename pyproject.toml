@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "free-video-upscaler"
+version = "0.1.0"
+description = "Self-hosted Real-ESRGAN x4 video upscaler with temporal smoothing — Free.ai open source. A free GPU-backed alternative to Topaz Video Upscaler."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Free.ai", email = "hello@free.ai" },
+]
+keywords = ["video", "upscale", "upscaler", "real-esrgan", "ai", "super-resolution"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.10"
+dependencies = [
+    # Real-ESRGAN + dependencies. Pin numpy<2 because the realesrgan
+    # 0.3.x lineage hasn't been re-tagged for numpy 2's _ARRAY_API
+    # changes — onnxruntime sibling installs in the same venv break
+    # silently otherwise.
+    "realesrgan>=0.3.0",
+    "basicsr>=1.4.2",
+    "numpy<2",
+    "opencv-python-headless>=4.8",
+    # torch must be installed separately by the user, with the right
+    # CUDA-version wheel. Don't pin here — pip's default torch wheel
+    # often doesn't match the user's driver. See README install note.
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff"]
+
+[project.scripts]
+# `pip install free-video-upscaler` puts this on the user's PATH.
+free-upscaler = "free_video_upscaler.cli:main"
+
+[project.urls]
+Homepage = "https://free.ai/video/upscale/"
+Repository = "https://github.com/freeaigit/video-upscaler"
+Issues = "https://github.com/freeaigit/video-upscaler/issues"
+
+[tool.setuptools]
+packages = ["free_video_upscaler"]
