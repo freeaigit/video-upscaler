@@ -29,7 +29,30 @@ without smearing motion. A scene-cut detector (per-pixel mean-abs-diff > 60)
 skips smoothing when adjacent frames are too different — preserves crisp
 edits, scene transitions, and very fast motion.
 
-## Install
+## Don't want to self-host? Use our hosted API
+
+If you don't have a GPU or just want to try the upscaler without setting
+anything up, hit our hosted endpoint — same code, our infra:
+
+```bash
+curl -X POST https://api.free.ai/v1/video/upscale/ \
+  -H "Authorization: Bearer sk-free-..." \
+  -F "file=@my-video.mp4" \
+  -F "model=realesrgan" \
+  -F "scale=2"
+# Returns: {"video_url": "https://gpu4.free.ai/static/outputs/<job>.mp4", ...}
+```
+
+- Get an API key at [free.ai/api/](https://free.ai/api/)
+- Free pool covers small clips daily; longer clips deduct from your token balance
+- Same temporal-smoothed pipeline as this repo, just running on our GPUs
+- Premium video-aware upscalers (Topaz, etc.) also available via the same
+  endpoint with `model=premium/topaz/upscale/video`
+
+For high-volume integrations, [contact us](https://free.ai/contact/) — we
+do volume pricing for partners.
+
+## Install (self-hosted)
 
 ```bash
 # 1. Install torch with the right CUDA version for your driver.
